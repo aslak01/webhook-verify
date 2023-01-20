@@ -24,6 +24,6 @@ jobs:
       - name: Fetch data
         uses: githubocto/flat@v3
         with:
-          http_url: ${{ secrets.FINN_QUERY }}
+          http_url: ${{ vars.FINN_QUERY }}
           downloaded_filename: finn_data.json
           postprocess: parseAds.ts ${{ secrets.WEBHOOK_URL }}
