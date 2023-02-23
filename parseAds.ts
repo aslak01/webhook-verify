@@ -2,10 +2,7 @@ import type { FinnAd } from "./types.ts";
 
 import { postToWebhook } from "./functions.ts";
 
-import {
-  readJSON,
-  writeJSON,
-} from "https://deno.land/x/flat@0.0.15/mod.ts";
+import { readJSON, writeJSON } from "https://deno.land/x/flat@0.0.15/mod.ts";
 
 import * as R from "https://x.nest.land/ramda@0.27.2/mod.ts";
 
@@ -45,4 +42,3 @@ if (difference.length) {
 
   await writeJSON(outputFile, newData);
 }
-

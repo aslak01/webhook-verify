@@ -1,4 +1,4 @@
-import type { FinnAd } from "./types.ts";
+  import type { FinnAd } from "./types.ts";
 
 export const postToWebhook = async (ad: FinnAd, webhookUrl: string) => {
   const content = { content: adToMsg(ad) };
