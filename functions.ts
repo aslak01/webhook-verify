@@ -1,4 +1,4 @@
-  import type { FinnAd } from "./types.ts";
+import type { FinnAd } from "./types.ts";
 
 export const postToWebhook = async (ad: FinnAd, webhookUrl: string) => {
   const content = { content: adToMsg(ad) };
@@ -16,5 +16,5 @@ export const postToWebhook = async (ad: FinnAd, webhookUrl: string) => {
 
 const adToMsg = (ad: FinnAd) => {
   return "**" + ad.heading + "** i " + ad.location + ": *" + ad.price.amount +
-    "* \n" + ad.ad_link;
+    "* \n" + "https://www.finn.no/bap/forsale/ad.html?finnkode=" + ad.id;
 };

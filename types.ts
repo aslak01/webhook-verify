@@ -1,4 +1,5 @@
 export interface FinnJobAd {
+  id: string
   "type": string;
   "ad_id": number;
   "main_search_key": string;
@@ -29,6 +30,7 @@ export interface FinnJobAd {
 }
 
 export interface FinnAd {
+  id: string
   "type": string
   "ad_id": number
   "main_search_key": string
