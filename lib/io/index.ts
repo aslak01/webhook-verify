@@ -5,6 +5,7 @@ import { writeToCSV } from "./csv.ts";
 import { compareInputToPrevFetch } from "../functions.ts";
 import { emptyDir } from "../imports.ts";
 import { adToMsg, saleAdParser as adFilter } from "../parsers.ts";
+import { removeUnwantedAds } from "../filters.ts";
 
 export * from "./fs.ts";
 export * from "./csv.ts";
@@ -35,7 +36,6 @@ export async function processAds(
 
   if (!newAds || !newAds.length || newAds.length < 1) {
     console.log("No new ads");
-    // TODO: Reenable this after checked that it's working
     await emptyDir(inputFilePath);
     console.log("cleared most recent fetch");
     await emptyDir(prevFetchFilePath);
@@ -51,7 +51,9 @@ export async function processAds(
     obj
   );
 
-  const processedFileData = verifiedNewAds.map(adFilter);
+  const processedFileData = verifiedNewAds.filter(removeUnwantedAds).map(
+    adFilter,
+  );
 
   await writeToCSV(processedFileData, outputFile);
 

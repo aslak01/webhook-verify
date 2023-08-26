@@ -67,7 +67,7 @@ export type AFinnAd = FinnAd | FinnJobAd;
 
 export type FilteredFinnAd = Pick<
   FinnAd,
-  "heading" | "location" | "timestamp"
+  "heading" | "location" | "timestamp" | "trade_type"
 >;
 
 export type MassagedFinnAd = {

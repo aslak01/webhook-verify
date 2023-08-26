@@ -50,6 +50,7 @@ export const saleAdParser = (ad: FinnAd): FilteredAndMassagedFinnAd => {
     price,
     timestamp,
     image,
+    trade_type,
   } = ad;
 
   const id = getFinnAdId(ad);
@@ -63,6 +64,7 @@ export const saleAdParser = (ad: FinnAd): FilteredAndMassagedFinnAd => {
     id,
     heading,
     location,
+    trade_type,
     date,
     price: nokPrice,
     coords: joinedCoordinates,
