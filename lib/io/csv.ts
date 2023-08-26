@@ -8,6 +8,7 @@ export async function writeToCSV(
 ) {
   const f = await Deno.open(outfile, {
     write: true,
+    create: true,
   });
 
   const readable = readableStreamFromIterable(data);

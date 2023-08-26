@@ -25,5 +25,5 @@ jobs:
         uses: githubocto/flat@v3.4.0
         with:
           http_url: https://www.finn.no/api/search-qf?q=&searchkey=SEARCH_ID_BAP_COMMON&vertical=bap&dealer_segment=1&condition=4&geoLocationName=Asker&gsq=kaffemaskin%3A1127d2a6fd27&lat=59.83333&lon=10.43721&product_category=2.93.3216.86&q=espresso+-nespresso&radius=30000
-          downloaded_filename: finn_data.json
-          postprocess: parseAds.ts ${{ secrets.WEBHOOK_URL }}
+          downloaded_filename: ./data/tmp/data.json
+          postprocess: main.ts data.json ${{ secrets.WEBHOOK_URL }}

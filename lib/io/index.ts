@@ -57,8 +57,10 @@ export async function processAds(
 
   await writeToCSV(processedFileData, outputFile);
 
-  for (const ad of processedFileData) {
-    await postToWebhook(ad, webhookPath);
+  if (webhookPath !== "no") {
+    for (const ad of processedFileData) {
+      await postToWebhook(ad, webhookPath);
+    }
   }
   return fetchedData.length;
 }
@@ -69,7 +71,9 @@ export async function initCSVfromJson(
 ): Promise<number> {
   const fetchedData = await readInputFile(inputFile);
 
-  const processedFileData = fetchedData.ads.map(adFilter);
+  const processedFileData = fetchedData.ads.filter(removeUnwantedAds).map(
+    adFilter,
+  );
 
   await writeToCSV(processedFileData, outputFile, true);
 
