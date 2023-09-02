@@ -1,10 +1,14 @@
 import { FilteredAndMassagedFinnAd, FinnAd, isFinnAd } from "../types.ts";
 
 import { readInputFile } from "./fs.ts";
-import { writeToCSV } from "./csv.ts";
-import { compareInputToPrevFetch } from "../functions.ts";
+import { readCsv, writeToCSV } from "./csv.ts";
+import {
+  compareInputToPrevFetch,
+  findUniqueEntries,
+  getFinnAdId,
+} from "../functions.ts";
 import { emptyDir } from "../imports.ts";
-import { adToMsg, saleAdParser as adFilter } from "../parsers.ts";
+import { adToMsg, saleAdParser } from "../parsers.ts";
 import { removeUnwantedAds } from "../filters.ts";
 
 export * from "./fs.ts";
@@ -41,19 +45,40 @@ export async function processAds(
     await emptyDir(prevFetchFilePath);
     await Deno.writeTextFile(prevFetchFile, fetchedData.docs);
     console.log("Wrote found entries to previous fetch file");
+    return 0;
   }
 
   await emptyDir(prevFetchFilePath);
-  await Deno.writeTextFile(prevFetchFilePath, fetchedData.docs);
+  await Deno.writeTextFile(prevFetchFile, JSON.stringify(fetchedData.docs));
+
+  const existingData = await readCsv(outputFile);
+  const existingDataIds = existingData.map((ad) => ad.id ? ad.id : "");
+  const newAdIds = newAds.map(getFinnAdId);
+
+  const diff = findUniqueEntries(existingDataIds, newAdIds);
+
+  if (!diff || diff.length === 0) {
+    console.log("no new ads");
+    return 0;
+  }
+
+  const reallyNewAds = newAds.filter((ad) => diff.includes(getFinnAdId(ad)));
 
   // cast input to type
-  const verifiedNewAds: FinnAd[] = newAds.filter(isFinnAd).map((obj: FinnAd) =>
-    obj
-  );
+  const verifiedNewAds: FinnAd[] = reallyNewAds.filter(isFinnAd).map((
+    obj: FinnAd,
+  ) => obj);
 
   const processedFileData = verifiedNewAds.filter(removeUnwantedAds).map(
-    adFilter,
+    saleAdParser,
   );
+
+  if (!processedFileData || processedFileData.length < 1) {
+    console.log("No new ads after filtering");
+    return 0;
+  }
+
+  // console.log(processedFileData);
 
   await writeToCSV(processedFileData, outputFile);
 
@@ -72,7 +97,7 @@ export async function initCSVfromJson(
   const fetchedData = await readInputFile(inputFile);
 
   const processedFileData = fetchedData.ads.filter(removeUnwantedAds).map(
-    adFilter,
+    saleAdParser,
   );
 
   await writeToCSV(processedFileData, outputFile, true);
@@ -84,6 +109,10 @@ export async function postToWebhook(
   ad: FilteredAndMassagedFinnAd,
   webhookUrl: string,
 ) {
+  if (webhookUrl === "console") {
+    console.log(adToMsg(ad));
+    return;
+  }
   const content = { content: adToMsg(ad) };
   const resp = await fetch(webhookUrl, {
     method: "POST",

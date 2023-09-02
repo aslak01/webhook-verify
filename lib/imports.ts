@@ -1,6 +1,13 @@
-import { join } from "https://deno.land/std@0.198.0/path/mod.ts";
-import { CsvStringifyStream } from "https://deno.land/std@0.192.0/csv/mod.ts";
-import { readableStreamFromIterable } from "https://deno.land/std@0.192.0/streams/readable_stream_from_iterable.ts";
-import { emptyDir } from "https://deno.land/std@0.198.0/fs/mod.ts";
+import { join } from "https://deno.land/std@0.200.0/path/mod.ts";
+import { CsvStringifyStream } from "https://deno.land/std@0.200.0/csv/mod.ts";
+import { emptyDir } from "https://deno.land/std@0.200.0/fs/mod.ts";
+import { CsvParseStream } from "https://deno.land/std@0.200.0/csv/mod.ts";
+import { parse } from "https://deno.land/std@0.200.0/csv/parse.ts";
 
-export { CsvStringifyStream, emptyDir, join, readableStreamFromIterable };
+export {
+  CsvParseStream,
+  CsvStringifyStream,
+  emptyDir,
+  join,
+  parse as parseCsv,
+};

@@ -80,7 +80,7 @@ export type MassagedFinnAd = {
 };
 
 export type FilteredAndMassagedFinnAd =
-  & Omit<FilteredFinnAd, "timestamp">
+  & FilteredFinnAd
   & MassagedFinnAd;
 
 export type FilteredFinnJobAd = Pick<

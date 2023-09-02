@@ -1,17 +1,25 @@
-import { CsvStringifyStream, readableStreamFromIterable } from "../imports.ts";
+import { CsvStringifyStream, parseCsv } from "../imports.ts";
 import { AFinnAd } from "../types.ts";
+
+export async function readCsv(
+  file: string,
+) {
+  const f = await Deno.readTextFile(file);
+  const data = parseCsv(f, { skipFirstRow: true });
+  return data;
+}
 
 export async function writeToCSV(
   data: Record<string, string | number>[],
   outfile: string,
-  useHeaders = false,
+  useHeaders = true,
 ) {
   const f = await Deno.open(outfile, {
     write: true,
     create: true,
   });
 
-  const readable = readableStreamFromIterable(data);
+  const readable = ReadableStream.from(data);
 
   let opts;
 

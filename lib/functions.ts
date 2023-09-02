@@ -1,19 +1,15 @@
+import { adToMsg } from "./parsers.ts";
 import type {
   FetchedFinnAds,
+  FilteredAndMassagedFinnAd,
   FinnAdBase,
-  MassagedAndFilteredFinnJobAd,
 } from "./types.ts";
 
-const formatToMsg = (ad: MassagedAndFilteredFinnJobAd) => {
-  return "**" + ad.company_name + "** i " + ad.location + ": *" + ad.job_title +
-    "* \n" + "https://www.finn.no/job/fulltime/ad.html?finnkode=" + ad.id;
-};
-
 export const postToWebhook = async (
-  ad: MassagedAndFilteredFinnJobAd,
+  ad: FilteredAndMassagedFinnAd,
   webhookUrl: string,
 ) => {
-  const content = { content: formatToMsg(ad) };
+  const content = { content: adToMsg(ad) };
   const resp = await fetch(webhookUrl, {
     method: "POST",
     headers: {

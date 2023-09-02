@@ -66,6 +66,7 @@ export const saleAdParser = (ad: FinnAd): FilteredAndMassagedFinnAd => {
     location,
     trade_type,
     date,
+    timestamp,
     price: nokPrice,
     coords: joinedCoordinates,
     url,
